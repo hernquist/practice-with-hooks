@@ -18,16 +18,16 @@ const server = new ApolloServer({
   context: async ({ req }) => {
     let authToken = null;
     let currentUser = null;
+
     try {
       authToken = req.headers.authorization;
       console.log("authToken", authToken);
       if (authToken) {
-        // find or create user
         currentUser = await findOrCreateUser(authToken);
       }
     } catch (err) {
       console.error(`Unable to authenicate user with token ${authToken}`);
-      console.error("Error", err);
+      console.error("Here's the Error", err);
     }
 
     return { currentUser };

@@ -22,17 +22,15 @@ const Login = ({ classes }) => {
     const client = new GraphQLClient("http://localhost:4000/playground", {
       headers: { authorization: idToken }
     });
-    console.log("client", client);
     const data = await client.request(ME_QUERY);
     console.log("data", { data });
   };
 
+  const clientId = process.env.REACT_APP_OAUTH_CLIENT_ID;
+  console.log(clientId);
+
   return (
-    <GoogleLogin
-      clientId={process.env.OAUTH_CLIENT_ID}
-      onSuccess={onSuccess}
-      isSignedIn={true}
-    />
+    <GoogleLogin clientId={clientId} onSuccess={onSuccess} isSignedIn={true} />
   );
 };
 

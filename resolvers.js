@@ -1,12 +1,5 @@
 const { AuthenticationError } = require("apollo-server");
 
-// const user = {
-//   _id: "1",
-//   name: "David",
-//   email: "hernquistdavid@gmail.com",
-//   picture: "https://cloudindary.com/asdasd"
-// };
-
 const authenticated = next => (root, args, ctx, info) => {
   if (!ctx.currentUser) {
     throw new AuthenticationError("You must be logged in");
