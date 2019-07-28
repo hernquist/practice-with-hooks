@@ -3,6 +3,7 @@ import ReactDOM from "react-dom";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 
 import App from "./pages/App";
+import ProtectedRoute from "./ProtectedRoute";
 import Splash from "./pages/Splash";
 import Context from "./context";
 import reducer from "./reducer";
@@ -20,7 +21,7 @@ const Root = () => {
     <Router>
       <Context.Provider value={{ state, dispatch }}>
         <Switch>
-          <Route exact path="/" component={App} />
+          <ProtectedRoute exact path="/" component={App} />
           <Route path="/login" component={Splash} />
         </Switch>
       </Context.Provider>
