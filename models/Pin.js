@@ -6,8 +6,8 @@ const PinSchema = new mongoose.Schema(
     title: String,
     content: String,
     image: String,
-    latitude: Nunmber,
-    longitude: Nunber,
+    latitude: Number,
+    longitude: Number,
     author: { type: mongoose.Schema.ObjectId, ref: "User" },
     comments: [
       {
@@ -20,4 +20,4 @@ const PinSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
-mongoose.model("Pin", PinSchema);
+module.exports = mongoose.model("Pin", PinSchema);
