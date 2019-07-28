@@ -6,7 +6,6 @@ import Context from "../context";
 
 const Splash = () => {
   const { state } = useContext(Context);
-  console.log("isAuth", state.isAuth);
 
   return state.isAuth ? <Redirect to="/" /> : <Login />;
 };
