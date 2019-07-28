@@ -40,7 +40,6 @@ const Map = ({ classes }) => {
   const handleMapClick = ({ lngLat, leftButton }) => {
     if (!leftButton) return;
 
-    console.log("hit me");
     if (!state.draft) {
       dispatch({ type: "CREATE_DRAFT" });
     }
@@ -68,7 +67,6 @@ const Map = ({ classes }) => {
             onViewportChange={newViewport => setViewport(newViewport)}
           />
         </div>
-        {/* Pin for current position */}
         {userPosition && (
           <Marker
             latitude={userPosition.latitude}
