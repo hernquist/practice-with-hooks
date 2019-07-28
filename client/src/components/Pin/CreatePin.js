@@ -1,4 +1,5 @@
-import React from "react";
+import React, { useState, useContext } from "react";
+import axios from "axios";
 import { withStyles } from "@material-ui/core/styles";
 import TextField from "@material-ui/core/TextField";
 import Typography from "@material-ui/core/Typography";
@@ -7,8 +8,42 @@ import AddAPhotoIcon from "@material-ui/icons/AddAPhotoTwoTone";
 import LandscapeIcon from "@material-ui/icons/LandscapeOutlined";
 import ClearIcon from "@material-ui/icons/Clear";
 import SaveIcon from "@material-ui/icons/SaveTwoTone";
+import Context from "../../context";
 
 const CreatePin = ({ classes }) => {
+  const { dispatch } = useContext(Context);
+
+  const [title, setTitle] = useState("");
+  const [image, setImage] = useState("");
+  const [content, setContent] = useState("");
+
+  const handleSubmit = async event => {
+    event.preventDefault();
+    const url = await handeImageUpload();
+    console.log({ url, image, title, content });
+  };
+
+  const handeImageUpload = async () => {
+    const data = new FormData();
+
+    data.append("file", image);
+    data.append("upload_preset", "geo-pins");
+    data.append("cloud_name", "dwzwyayja");
+
+    const res = await axios.post(
+      "https://api.cloudinary.com/v1_1/dwzwyayja/image/upload",
+      data
+    );
+    return res.data.url;
+  };
+
+  const handleDeleteDraft = () => {
+    setTitle("");
+    setImage("");
+    setContent("");
+    dispatch({ type: "DELETE_DRAFT" });
+  };
+
   return (
     <form className={classes.form}>
       <Typography
@@ -20,15 +55,27 @@ const CreatePin = ({ classes }) => {
         <LandscapeIcon className={classes.iconLarge} /> Pin Location
       </Typography>
       <div>
-        <TextField name="title" label="Title" placeholder="Insert pin title" />
+        <TextField
+          name="title"
+          label="Title"
+          value={title}
+          placeholder="Insert pin title"
+          onChange={e => setTitle(e.target.value)}
+        />
         <input
+          type="file"
           id="image"
           accept="image/*"
-          type="file"
           className={classes.input}
+          onChange={e => setImage(e.target.files[0])}
         />
         <label htmlFor="image">
-          <Button component="span" size="small" className={classes.button}>
+          <Button
+            style={{ color: image && "green" }}
+            component="span"
+            size="small"
+            className={classes.button}
+          >
             <AddAPhotoIcon />
           </Button>
         </label>
@@ -37,23 +84,32 @@ const CreatePin = ({ classes }) => {
         <TextField
           name="content"
           label="Content"
+          value={content}
           multiline
           rows="6"
           margin="normal"
           fullWidth
           variant="outlined"
+          onChange={e => setContent(e.target.value)}
         />
       </div>
       <div className={classes.contentField}>
-        <Button className={classes.button} variant="contained" color="primary">
+        <Button
+          onClick={handleDeleteDraft}
+          className={classes.button}
+          variant="contained"
+          color="primary"
+        >
           <ClearIcon className={classes.leftIcon} />
           Discard
         </Button>
         <Button
+          type="Submit"
           className={classes.button}
           variant="contained"
-          type="Submit"
           color="secondary"
+          disabled={!title.trim() || !content.trim() || !image}
+          onClick={handleSubmit}
         >
           Submit
           <SaveIcon className={classes.rightIcon} />

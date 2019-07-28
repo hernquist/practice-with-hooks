@@ -7,12 +7,12 @@ const NoContent = ({ classes }) => (
   <div className={classes.root}>
     <ExploreIcon className={classes.icon} />
     <Typography
-      noWrap
       component="h2"
       variant="h6"
       align="center"
       gutterBottom
-      colorText="primary"
+      noWrap
+      color="primary"
     >
       Click on map to add a pin
     </Typography>
