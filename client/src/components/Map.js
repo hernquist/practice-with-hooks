@@ -3,6 +3,11 @@ import { withStyles } from "@material-ui/core/styles";
 import ReactMapGL, { NavigationControl, Marker, Popup } from "react-map-gl";
 import Button from "@material-ui/core/Button";
 import DeleteIcon from "@material-ui/icons/DeleteTwoTone";
+import Radio from "@material-ui/core/Radio";
+// import RadioButton from "@material-ui/core/RadioButton";
+import RadioGroup from "@material-ui/core/RadioGroup";
+import FormHelperText from "@material-ui/core/FormHelperText";
+import FormControlLabel from "@material-ui/core/FormControlLabel";
 import { Typography } from "@material-ui/core";
 import differenceInMinutes from "date-fns/difference_in_minutes";
 import PinIcon from "./PinIcon";
@@ -48,10 +53,15 @@ const Map = ({ classes }) => {
 
   const getPins = async () => {
     const { getPins } = await client.request(GET_PINS_QUERY);
+
     dispatch({ type: "GET_PINS", payload: getPins });
   };
 
-  const handleMapClick = ({ lngLat, leftButton }) => {
+  const handleMapClick = ({ lngLat, leftButton, target }) => {
+    if (Object.keys(target).some(key => key === "checked")) {
+      return;
+    }
+
     if (!leftButton) return;
 
     if (!state.draft) {
@@ -80,14 +90,20 @@ const Map = ({ classes }) => {
   const handleDeletePin = async pin => {
     const variables = { pinId: pin._id };
     const { deletePin } = await client.request(DELETE_PIN_MUTATION, variables);
-    console.log("deletedPin", deletePin);
     dispatch({ type: "DELETE_PIN", payload: deletePin });
     setPopup(null);
+  };
+
+  const handleMapStyleChange = e => {
+    setMapStyle({ style: e.target.value });
+
+    dispatch({ type: "DELETE_DRAFT" });
   };
 
   return (
     <div className={classes.root}>
       <ReactMapGL
+        id="other"
         width="100vw"
         height="calc(100vh - 64px)"
         mapStyle={`mapbox://styles/mapbox/${mapStyle.style}-v9`}
@@ -98,8 +114,30 @@ const Map = ({ classes }) => {
       >
         <div className={classes.navigationControl}>
           <NavigationControl
+            style={{ width: "30px" }}
             onViewportChange={newViewport => setViewport(newViewport)}
           />
+        </div>
+        <div className={classes.mapStylesControl}>
+          <RadioGroup
+            id="overwrites"
+            aria-label="map-styles"
+            name="map-styles"
+            className={classes.group}
+            value={mapStyle.style}
+            onChange={handleMapStyleChange}
+          >
+            <FormControlLabel
+              value="streets"
+              control={<Radio />}
+              label="Street View"
+            />
+            <FormControlLabel
+              value="satellite"
+              control={<Radio />}
+              label="Satellite View"
+            />
+          </RadioGroup>
         </div>
         {userPosition && (
           <Marker
@@ -180,6 +218,12 @@ const styles = {
   navigationControl: {
     position: "absolute",
     top: 0,
+    left: 0,
+    margin: "1em"
+  },
+  mapStylesControl: {
+    position: "absolute",
+    top: 100,
     left: 0,
     margin: "1em"
   },
