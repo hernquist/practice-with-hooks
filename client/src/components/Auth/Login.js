@@ -28,7 +28,10 @@ const Login = ({ classes }) => {
 
   const clientId = process.env.REACT_APP_OAUTH_CLIENT_ID;
 
-  const onFailure = err => console.error("Error logging in", err);
+  const onFailure = err => {
+    console.error("Error logging in", err);
+    dispatch({ type: "IS_LOGGED_IN", payload: false });
+  };
 
   return (
     <div className={classes.root}>

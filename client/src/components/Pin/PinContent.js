@@ -18,7 +18,7 @@ const PinContent = ({ classes }) => {
         {title}
       </Typography>
       <Typography
-        className={classes.name}
+        className={classes.text}
         component="h3"
         variant="h6"
         gutterBottom
