@@ -2,7 +2,6 @@ import React, { useContext } from "react";
 import { GraphQLClient } from "graphql-request";
 import { GoogleLogin } from "react-google-login";
 import { withStyles } from "@material-ui/core/styles";
-
 import Context from "../../context";
 import { ME_QUERY } from "../../graphql/queries";
 import Typography from "@material-ui/core/Typography";
@@ -46,7 +45,7 @@ const Login = ({ classes }) => {
       </Typography>
       <GoogleLogin
         theme="dark"
-        clientId={clientId}
+        clientId="905556817940-kkta4i2fc2f52l0f9h5b5mg0t9pplim4.apps.googleusercontent.com"
         onSuccess={onSuccess}
         isSignedIn={true}
         onFailure={onFailure}

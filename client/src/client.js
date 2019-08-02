@@ -3,7 +3,7 @@ import { GraphQLClient } from "graphql-request";
 
 export const BASE_URL =
   process.env.NODE_ENV === "production"
-    ? "http://prac-with-hooks.herokuapp.com/graphql"
+    ? "https://prac-with-hooks.herokuapp.com/graphql"
     : "http://localhost:4000/playground";
 
 export const useClient = () => {

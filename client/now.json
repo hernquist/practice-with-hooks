@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "name": "GeoPins",
+  "name": "prac-with-hooks",
   "builds": [
     {
       "src": "package.json",
@@ -28,5 +28,9 @@
       "headers": { "cache-control": "s-maxage=0" },
       "dest": "/index.html"
     }
-  ]
+  ],
+  "env": {
+    "REACT_APP_OAUTH_CLIENT_ID": "905556817940-kkta4i2fc2f52l0f9h5b5mg0t9pplim4.apps.googleusercontent.com",
+    "REACT_APP_OAUTH_CLIENT_SECRET": "K6e7y3pktgUV9vTMR3PG85Vd"
+  }
 }
