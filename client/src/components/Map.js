@@ -10,6 +10,7 @@ import FormHelperText from "@material-ui/core/FormHelperText";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
 import { Typography } from "@material-ui/core";
 import { Subscription } from "react-apollo";
+import { unstable_useMediaQuery as useMediaQuery } from "@material-ui/core/useMediaQuery";
 import differenceInMinutes from "date-fns/difference_in_minutes";
 import PinIcon from "./PinIcon";
 import Context from "../context";
@@ -35,6 +36,8 @@ const INITIAL_MAP_STYLE = {
 
 const Map = ({ classes }) => {
   const client = useClient();
+
+  const mobileSize = useMediaQuery("(max-width: 650px)");
   const { state, dispatch } = useContext(Context);
   const [viewport, setViewport] = useState(INITIAL_VIEWPORT);
   const [mapStyle, setMapStyle] = useState(INITIAL_MAP_STYLE);
@@ -46,6 +49,14 @@ const Map = ({ classes }) => {
     getPins();
   }, []);
   const [popup, setPopup] = useState(null);
+  // remove popUp if pin itself is deleted by the author
+  useEffect(() => {
+    const pinExists =
+      popup && state.pins.findIndex(pin => pin._id === popup._id) > -1;
+    if (!pinExists) {
+      setPopup(null);
+    }
+  }, [state.pins.length]);
 
   const getUserPosition = () => {
     if ("geolocation" in navigator) {
@@ -107,13 +118,14 @@ const Map = ({ classes }) => {
   };
 
   return (
-    <div className={classes.root}>
+    <div className={mobileSize ? classes.rootMobile : classes.root}>
       <ReactMapGL
         id="other"
         width="100vw"
         height="calc(100vh - 64px)"
         mapStyle={`mapbox://styles/mapbox/${mapStyle.style}-v9`}
         mapboxApiAccessToken="pk.eyJ1IjoiaGVybnF1aXN0IiwiYSI6ImNqeW1kNXN2cjBpMGEzY215bXZlODJ3a2IifQ.yj9qFSIpVggDtE51MpeTQg"
+        scrollZoom={!mobileSize}
         onViewportChange={newViewport => setViewport(newViewport)}
         onClick={handleMapClick}
         {...viewport}
